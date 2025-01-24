@@ -1,0 +1,195 @@
+#pragma version 10
+#pragma typetrack false
+
+// getAlgoPriceContract.getAlgoPriceContract.__algopy_entrypoint_with_init() -> uint64:
+main:
+    intcblock 0 1 1000000
+    bytecblock "usdc_pool_address" "tinyman_router" 0x151f7c75 0x61737365745f315f7265736572766573 0x61737365745f325f7265736572766573
+    txn ApplicationID
+    bnz main_after_if_else@2
+    // getAlgoPriceContract.py:7
+    // self.usdc_pool_address = Account('UDFWT5DW3X5RZQYXKQEMZ6MRWAEYHWYP7YUAPZKPW6WJK3JH3OZPL7PO2Y')
+    bytec_0 // "usdc_pool_address"
+    pushbytes base32(UDFWT5DW3X5RZQYXKQEMZ6MRWAEYHWYP7YUAPZKPW6WJK3JH3OZA) // addr UDFWT5DW3X5RZQYXKQEMZ6MRWAEYHWYP7YUAPZKPW6WJK3JH3OZPL7PO2Y
+    app_global_put
+    // getAlgoPriceContract.py:8
+    // self.tinyman_router = Application(148607000)
+    bytec_1 // "tinyman_router"
+    pushint 148607000 // 148607000
+    app_global_put
+
+main_after_if_else@2:
+    // getAlgoPriceContract.py:5
+    // class getAlgoPriceContract(ARC4Contract):
+    txn NumAppArgs
+    bz main_bare_routing@7
+    pushbytess 0xa1ebb164 0xbb765f24 // method "callGetScaledAlgoPrice()uint64", method "getTargetUSDCAmountInAlgo(uint64)uint64"
+    txna ApplicationArgs 0
+    match main_callGetScaledAlgoPrice_route@5 main_getTargetUSDCAmountInAlgo_route@6
+
+main_after_if_else@9:
+    // getAlgoPriceContract.py:5
+    // class getAlgoPriceContract(ARC4Contract):
+    intc_0 // 0
+    return
+
+main_getTargetUSDCAmountInAlgo_route@6:
+    // getAlgoPriceContract.py:36
+    // @abimethod
+    txn OnCompletion
+    !
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    assert // can only call when not creating
+    // getAlgoPriceContract.py:5
+    // class getAlgoPriceContract(ARC4Contract):
+    txna ApplicationArgs 1
+    btoi
+    // getAlgoPriceContract.py:36
+    // @abimethod
+    callsub getTargetUSDCAmountInAlgo
+    itob
+    bytec_2 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_1 // 1
+    return
+
+main_callGetScaledAlgoPrice_route@5:
+    // getAlgoPriceContract.py:10
+    // @abimethod
+    txn OnCompletion
+    !
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    assert // can only call when not creating
+    callsub callGetScaledAlgoPrice
+    itob
+    bytec_2 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_1 // 1
+    return
+
+main_bare_routing@7:
+    // getAlgoPriceContract.py:5
+    // class getAlgoPriceContract(ARC4Contract):
+    txn OnCompletion
+    bnz main_after_if_else@9
+    txn ApplicationID
+    !
+    assert // can only call when creating
+    intc_1 // 1
+    return
+
+
+// getAlgoPriceContract.getAlgoPriceContract.callGetScaledAlgoPrice() -> uint64:
+callGetScaledAlgoPrice:
+    // getAlgoPriceContract.py:10-13
+    // @abimethod
+    // def callGetScaledAlgoPrice(
+    //     self
+    // ) -> UInt64:
+    proto 0 1
+    // getAlgoPriceContract.py:15
+    // USDC_reserve = op.AppLocal.get_ex_uint64(self.usdc_pool_address, self.tinyman_router, b'asset_1_reserves')[0]
+    intc_0 // 0
+    bytec_0 // "usdc_pool_address"
+    app_global_get_ex
+    assert // check self.usdc_pool_address exists
+    intc_0 // 0
+    bytec_1 // "tinyman_router"
+    app_global_get_ex
+    assert // check self.tinyman_router exists
+    bytec_3 // 0x61737365745f315f7265736572766573
+    app_local_get_ex
+    pop
+    // getAlgoPriceContract.py:16
+    // ALGO_reserve = op.AppLocal.get_ex_uint64(self.usdc_pool_address, self.tinyman_router, b'asset_2_reserves')[0]
+    intc_0 // 0
+    bytec_0 // "usdc_pool_address"
+    app_global_get_ex
+    assert // check self.usdc_pool_address exists
+    intc_0 // 0
+    bytec_1 // "tinyman_router"
+    app_global_get_ex
+    assert // check self.tinyman_router exists
+    bytec 4 // 0x61737365745f325f7265736572766573
+    app_local_get_ex
+    pop
+    // getAlgoPriceContract.py:20
+    // return USDC_reserve * SCALE_FACTOR // ALGO_reserve
+    swap
+    // getAlgoPriceContract.py:18
+    // SCALE_FACTOR = UInt64(1_000_000)
+    intc_2 // 1000000
+    // getAlgoPriceContract.py:20
+    // return USDC_reserve * SCALE_FACTOR // ALGO_reserve
+    *
+    swap
+    /
+    retsub
+
+
+// getAlgoPriceContract.getAlgoPriceContract.getTargetUSDCAmountInAlgo(target_usdc: uint64) -> uint64:
+getTargetUSDCAmountInAlgo:
+    // getAlgoPriceContract.py:36-40
+    // @abimethod
+    // def getTargetUSDCAmountInAlgo(
+    //     self,
+    //     target_usdc: UInt64
+    // ) -> UInt64:
+    proto 1 1
+    // getAlgoPriceContract.py:28
+    // USDC_reserve = op.AppLocal.get_ex_uint64(self.usdc_pool_address, self.tinyman_router, b'asset_1_reserves')[0]
+    intc_0 // 0
+    bytec_0 // "usdc_pool_address"
+    app_global_get_ex
+    assert // check self.usdc_pool_address exists
+    intc_0 // 0
+    bytec_1 // "tinyman_router"
+    app_global_get_ex
+    assert // check self.tinyman_router exists
+    bytec_3 // 0x61737365745f315f7265736572766573
+    app_local_get_ex
+    pop
+    // getAlgoPriceContract.py:29
+    // ALGO_reserve = op.AppLocal.get_ex_uint64(self.usdc_pool_address, self.tinyman_router, b'asset_2_reserves')[0]
+    intc_0 // 0
+    bytec_0 // "usdc_pool_address"
+    app_global_get_ex
+    assert // check self.usdc_pool_address exists
+    intc_0 // 0
+    bytec_1 // "tinyman_router"
+    app_global_get_ex
+    assert // check self.tinyman_router exists
+    bytec 4 // 0x61737365745f325f7265736572766573
+    app_local_get_ex
+    pop
+    // getAlgoPriceContract.py:33
+    // return USDC_reserve * SCALE_FACTOR // ALGO_reserve
+    swap
+    // getAlgoPriceContract.py:31
+    // SCALE_FACTOR = UInt64(10_000)
+    pushint 10000 // 10000
+    // getAlgoPriceContract.py:33
+    // return USDC_reserve * SCALE_FACTOR // ALGO_reserve
+    *
+    swap
+    /
+    // getAlgoPriceContract.py:46
+    // amount_in_algo = target_usdc * SCALE_FACTOR // scaled_algo_price
+    frame_dig -1
+    // getAlgoPriceContract.py:44
+    // SCALE_FACTOR = UInt64(1_000_000)
+    intc_2 // 1000000
+    // getAlgoPriceContract.py:46
+    // amount_in_algo = target_usdc * SCALE_FACTOR // scaled_algo_price
+    *
+    swap
+    /
+    // getAlgoPriceContract.py:48
+    // return amount_in_algo
+    retsub
