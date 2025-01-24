@@ -24,7 +24,6 @@ address = address_from_private_key(private_key)
 
 params = algod_client.suggested_params()
 
-
 app_client = ApplicationClient(
     algod_client=algod_client,
     app_id=app_id,
@@ -49,11 +48,14 @@ app_client.compose_call(
     }
 )
 
+
 sim_req = SimulateRequest(txn_groups=atc.build_group())
 results = atc.simulate(algod_client, sim_req)
 
+
 abi_results = [results.abi_results[i].return_value for i in range(len(results.abi_results))]
 tx_ids = [results.tx_ids[i] for i in range(len(results.tx_ids))]
+
 
 scaled_algo_price = abi_results[0] / 1_000_000
 print(f'Scaled Algo Price: {scaled_algo_price}')
