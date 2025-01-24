@@ -36,7 +36,6 @@ app_client = ApplicationClient(
     indexer_client=indexer_client
 )
 
-
 app_id = app_client.deploy(on_schema_break=OnSchemaBreak.AppendApp, on_update=OnUpdate.AppendApp).app.app_id
 
 print(app_id)
