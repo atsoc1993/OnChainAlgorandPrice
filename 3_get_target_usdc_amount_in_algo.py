@@ -58,6 +58,6 @@ results = atc.simulate(algod_client, sim_req)
 abi_results = [results.abi_results[i].return_value for i in range(len(results.abi_results))]
 tx_ids = [results.tx_ids[i] for i in range(len(results.tx_ids))]
 
-algorand_amount_of_usdc = abi_results[0] 
+algorand_amount_of_usdc = abi_results[0] / 100
 print(f'USDC amount in Algo Algo Price: {algorand_amount_of_usdc}')
 print(f'Tx IDS: {tx_ids}')
